@@ -17,17 +17,32 @@ public class OrderReceipt {
         StringBuilder output = new StringBuilder();
         appendPrintHeaders(output);
         appendCustomerMessage(output);
-        double totalSalesTax = 0d;
+        appendLineItems(output);
+        appendSalesTax(output, calculateTotalSalesTax());
+        appendTotalAmount(output, calculateTotalAmount());
+        return output.toString();
+    }
+
+    private double calculateTotalAmount() {
         double totalAmount = 0d;
         for (LineItem lineItem : o.getLineItems()) {
-            appendLineItem(output, lineItem);
-            double salesTax = getItemSalesTax(lineItem);
-            totalSalesTax += salesTax;
-            totalAmount = getLineItemTotalAmount(totalAmount, lineItem, salesTax);
+            totalAmount = getLineItemTotalAmount(totalAmount, lineItem, getItemSalesTax(lineItem));
         }
-        appendSalesTax(output, totalSalesTax);
-        appendTotalAmount(output, totalAmount);
-        return output.toString();
+        return totalAmount;
+    }
+
+    private double calculateTotalSalesTax() {
+        double totalSalesTax = 0d;
+        for (LineItem lineItem : o.getLineItems()) {
+            totalSalesTax += getItemSalesTax(lineItem);
+        }
+        return totalSalesTax;
+    }
+
+    private void appendLineItems(StringBuilder output) {
+        for (LineItem lineItem : o.getLineItems()) {
+            appendLineItem(output, lineItem);
+        }
     }
 
     private void appendLineItem(StringBuilder output, LineItem lineItem) {
