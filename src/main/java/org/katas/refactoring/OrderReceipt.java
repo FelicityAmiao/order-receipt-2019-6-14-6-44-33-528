@@ -7,50 +7,22 @@ package org.katas.refactoring;
  * total sales tax) and prints it.
  */
 public class OrderReceipt {
-    private Order o;
+    private Order order;
 
     public OrderReceipt(Order o) {
-        this.o = o;
+        this.order = o;
     }
 
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
         appendPrintHeaders(output);
         appendCustomerMessage(output);
-        appendLineItems(output);
-        appendSalesTax(output, calculateTotalSalesTax());
-        appendTotalAmount(output, calculateTotalAmount());
+        order.appendLineItems(output);
+        appendSalesTax(output, order.calculateTotalSalesTax());
+        appendTotalAmount(output, order.calculateTotalAmount());
         return output.toString();
     }
 
-    private double calculateTotalAmount() {
-        double totalAmount = 0d;
-        for (LineItem lineItem : o.getLineItems()) {
-            totalAmount = lineItem.getLineItemTotalAmount(totalAmount);
-        }
-        return totalAmount;
-    }
-
-    private double calculateTotalSalesTax() {
-        double totalSalesTax = 0d;
-        for (LineItem lineItem : o.getLineItems()) {
-            totalSalesTax += lineItem.getItemSalesTax();
-        }
-        return totalSalesTax;
-    }
-
-    private void appendLineItems(StringBuilder output) {
-        for (LineItem lineItem : o.getLineItems()) {
-            appendLineItem(output, lineItem);
-        }
-    }
-
-    private void appendLineItem(StringBuilder output, LineItem lineItem) {
-        output.append(lineItem.getDescription()).append('\t');
-        output.append(lineItem.getPrice()).append('\t');
-        output.append(lineItem.getQuantity()).append('\t');
-        output.append(lineItem.totalAmount()).append('\n');
-    }
 
     private StringBuilder appendTotalAmount(StringBuilder output, double totalAmount) {
         return output.append("Total Amount").append('\t').append(totalAmount);
@@ -61,8 +33,8 @@ public class OrderReceipt {
     }
 
     private void appendCustomerMessage(StringBuilder output) {
-        output.append(o.getCustomerName());
-        output.append(o.getCustomerAddress());
+        output.append(order.getCustomerName());
+        output.append(order.getCustomerAddress());
     }
 
     private StringBuilder appendPrintHeaders(StringBuilder output) {

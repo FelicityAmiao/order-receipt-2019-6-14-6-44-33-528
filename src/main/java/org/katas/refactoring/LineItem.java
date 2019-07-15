@@ -36,4 +36,11 @@ public class LineItem {
     public double getLineItemTotalAmount(double totalAmount) {
         return totalAmount + totalAmount() + getItemSalesTax();
     }
+
+    public void appendLineItem(StringBuilder output, LineItem lineItem) {
+        output.append(lineItem.getDescription()).append('\t');
+        output.append(lineItem.getPrice()).append('\t');
+        output.append(lineItem.getQuantity()).append('\t');
+        output.append(lineItem.totalAmount()).append('\n');
+    }
 }
