@@ -8,6 +8,7 @@ package org.katas.refactoring;
  */
 public class OrderReceipt {
     private Order o;
+    private static final double TAX_RATE = 0.1;
 
     public OrderReceipt(Order o) {
         this.o = o;
@@ -66,7 +67,7 @@ public class OrderReceipt {
     }
 
     private double getItemSalesTax(LineItem lineItem) {
-        return lineItem.totalAmount() * .10;
+        return lineItem.totalAmount() * TAX_RATE;
     }
 
     private void appendCustomerMessage(StringBuilder output) {
