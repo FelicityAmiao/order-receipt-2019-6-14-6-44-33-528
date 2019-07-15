@@ -8,7 +8,6 @@ package org.katas.refactoring;
  */
 public class OrderReceipt {
     private Order o;
-    private static final double TAX_RATE = 0.1;
 
     public OrderReceipt(Order o) {
         this.o = o;
@@ -27,7 +26,7 @@ public class OrderReceipt {
     private double calculateTotalAmount() {
         double totalAmount = 0d;
         for (LineItem lineItem : o.getLineItems()) {
-            totalAmount = getLineItemTotalAmount(totalAmount, lineItem, getItemSalesTax(lineItem));
+            totalAmount = lineItem.getLineItemTotalAmount(totalAmount);
         }
         return totalAmount;
     }
@@ -35,7 +34,7 @@ public class OrderReceipt {
     private double calculateTotalSalesTax() {
         double totalSalesTax = 0d;
         for (LineItem lineItem : o.getLineItems()) {
-            totalSalesTax += getItemSalesTax(lineItem);
+            totalSalesTax += lineItem.getItemSalesTax();
         }
         return totalSalesTax;
     }
@@ -59,15 +58,6 @@ public class OrderReceipt {
 
     private StringBuilder appendSalesTax(StringBuilder output, double totalSalesTax) {
         return output.append("Sales Tax").append('\t').append(totalSalesTax);
-    }
-
-    private double getLineItemTotalAmount(double totalAmount, LineItem lineItem, double salesTax) {
-        totalAmount += lineItem.totalAmount() + salesTax;
-        return totalAmount;
-    }
-
-    private double getItemSalesTax(LineItem lineItem) {
-        return lineItem.totalAmount() * TAX_RATE;
     }
 
     private void appendCustomerMessage(StringBuilder output) {
