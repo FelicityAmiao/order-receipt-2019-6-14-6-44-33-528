@@ -17,8 +17,8 @@ public class OrderReceipt {
         StringBuilder output = new StringBuilder();
         appendPrintHeaders(output);
         appendCustomerMessage(output);
-        double totSalesTx = 0d;
-        double tot = 0d;
+        double totalSalesTax = 0d;
+        double totalAmount = 0d;
         for (LineItem lineItem : o.getLineItems()) {
             output.append(lineItem.getDescription());
             output.append('\t');
@@ -30,25 +30,25 @@ public class OrderReceipt {
             output.append('\n');
 
             double salesTax = getItemSalesTax(lineItem);
-            totSalesTx += salesTax;
-            tot = getLineItemTotalAmount(tot, lineItem, salesTax);
+            totalSalesTax += salesTax;
+            totalAmount = getLineItemTotalAmount(totalAmount, lineItem, salesTax);
         }
-        appendSalesTax(output, totSalesTx);
-        appendTotalAmount(output, tot);
+        appendSalesTax(output, totalSalesTax);
+        appendTotalAmount(output, totalAmount);
         return output.toString();
     }
 
-    private StringBuilder appendTotalAmount(StringBuilder output, double tot) {
-        return output.append("Total Amount").append('\t').append(tot);
+    private StringBuilder appendTotalAmount(StringBuilder output, double totalAmount) {
+        return output.append("Total Amount").append('\t').append(totalAmount);
     }
 
-    private StringBuilder appendSalesTax(StringBuilder output, double totSalesTx) {
-        return output.append("Sales Tax").append('\t').append(totSalesTx);
+    private StringBuilder appendSalesTax(StringBuilder output, double totalSalesTax) {
+        return output.append("Sales Tax").append('\t').append(totalSalesTax);
     }
 
-    private double getLineItemTotalAmount(double tot, LineItem lineItem, double salesTax) {
-        tot += lineItem.totalAmount() + salesTax;
-        return tot;
+    private double getLineItemTotalAmount(double totalAmount, LineItem lineItem, double salesTax) {
+        totalAmount += lineItem.totalAmount() + salesTax;
+        return totalAmount;
     }
 
     private double getItemSalesTax(LineItem lineItem) {
